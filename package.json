@@ -1,0 +1,26 @@
+{
+  "name": "first-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nf start",
+    "api": "node api.js",
+    "build": "webpack",
+    "client": "webpack-dev-server --port 3000"
+  },
+  "repository": {},
+  "license": "MIT",
+  "dependencies": {
+    "css-loader": "^0.28.0",
+    "elm-webpack-loader": "^4.3.0",
+    "file-loader": "^0.11.1",
+    "json-server": "0.9.5",
+    "style-loader": "^0.16.1",
+    "url-loader": "^0.5.8",
+    "webpack": "^2.4.1",
+    "webpack-dev-server": "^2.4.5"
+  },
+  "devDependencies": {
+    "foreman": "^2.0.0"
+  }
+}
