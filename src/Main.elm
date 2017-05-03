@@ -1,9 +1,16 @@
 module Main exposing (..)
 
 import Html exposing (..)
+import Types exposing (..)
+import Dict
 
 
 -- APP
+
+
+init : ( Model, Cmd Msg )
+init =
+    ( Model Dict.empty Top Nothing Nothing, Cmd.none )
 
 
 main : Program Never Model Msg
@@ -15,35 +22,6 @@ main =
         , subscriptions = subscriptions
         }
 
-
-
--- MODEL
-
-
-type alias Story =
-    { by : String
-    , id : Int
-    , kids : List Int
-    , score : Int
-    , time : Int
-    , title : String
-    , type_ : String
-    , url : String
-    }
-
-
-type alias Model =
-    { stories : List Story
-    }
-
-
-init : ( Model, Cmd Msg )
-init =
-    ( Model [ Story "Author" 0 [ 0 ] 0 0 "Title" "type" "url" ], Cmd.none )
-
-
-
--- UPDATE
 
 
 type Msg
