@@ -2,6 +2,7 @@ module Main exposing (..)
 
 import Html exposing (..)
 import Update exposing (update)
+import View exposing (view)
 import Types exposing (..)
 import Dict
 
@@ -22,21 +23,6 @@ main =
         , update = update
         , subscriptions = subscriptions
         }
-
-
-
--- VIEW
-
-
-story : Story -> Html Msg
-story value =
-    div [] [ text value.title ]
-
-
-view : Model -> Html Msg
-view model =
-    div []
-        (List.map story model.stories)
 
 
 
