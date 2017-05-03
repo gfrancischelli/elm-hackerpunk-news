@@ -1,6 +1,7 @@
 module Main exposing (..)
 
 import Html exposing (..)
+import Update exposing (update)
 import Types exposing (..)
 import Dict
 
@@ -21,18 +22,6 @@ main =
         , update = update
         , subscriptions = subscriptions
         }
-
-
-
-type Msg
-    = NoOp
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        NoOp ->
-            ( model, Cmd.none )
 
 
 
