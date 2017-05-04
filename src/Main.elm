@@ -1,10 +1,11 @@
-module Main exposing (..)
+port module Main exposing (..)
 
 import Html exposing (..)
-import Update exposing (update)
+import Update exposing (update, loadFeedData)
 import View exposing (view)
 import Types exposing (..)
 import Dict
+import Json.Encode as Json
 
 
 -- APP
@@ -29,6 +30,15 @@ main =
 -- SUBSCRIPTIONS
 
 
+port updateFeedIds : (List Int -> msg) -> Sub msg
+
+
+port updateItem : (Json.Value -> msg) -> Sub msg
+
+
 subscriptions : Model -> Sub Msg
 subscriptions model =
-    Sub.none
+    Sub.batch
+        [ updateFeedIds UpdateFeedIds
+        , updateItem UpdateItem
+        ]
