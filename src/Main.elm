@@ -13,7 +13,7 @@ import Json.Encode as Json
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model Dict.empty Top Nothing Nothing, Cmd.none )
+    ( Model Dict.empty (Main Top) Nothing Nothing, loadFeedData Top )
 
 
 main : Program Never Model Msg

@@ -1,38 +1,42 @@
 module Types exposing (..)
 
 import Dict
+import Json.Encode as Json
 
 
 type alias Model =
     { stories : StoryPool
     , currentPage : Page
-    , feed : Maybe Feed
-    , topic : Maybe Story
+    , feed : Maybe (List Int)
+    , thread : Maybe Story
     }
+
+
+type Page
+    = Main Feed
+    | Thread Story
 
 
 type Msg
     = ShowPage Page
     | ListenToFeed Feed
-    | UpdateFeedIds (List Story)
+    | UpdateItem Json.Value
+    | UpdateFeedIds (List Int)
 
 
 type alias Story =
     { by : String
     , id : Int
-    , time : Int
-    , score : Int
     , url : String
+    , descendants : Int
+    , kids : List Int
+    , parts : List Int
+    , score : Int
+    , text : String
+    , time : Int
     , title : String
     , type_ : String
-    , kids : List Int
-    , parent : Maybe String
-    , kids : List Int
     }
-
-
-type alias Feed =
-    List Int
 
 
 type Comments
@@ -43,8 +47,7 @@ type alias StoryPool =
     Dict.Dict Int Story
 
 
-type Page
+type Feed
     = Best
     | Top
     | New
-    | Topic
