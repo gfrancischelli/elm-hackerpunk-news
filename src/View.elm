@@ -1,5 +1,6 @@
 module View exposing (..)
 
+import View.Story exposing (viewStoryList)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Types exposing (..)
