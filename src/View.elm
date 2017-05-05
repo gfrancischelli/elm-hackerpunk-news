@@ -1,6 +1,7 @@
 module View exposing (..)
 
 import View.Story exposing (viewStoryList)
+import View.Thread exposing (viewThread)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (href, class, id)
@@ -34,7 +35,7 @@ viewpage : Model -> Html Msg
 viewpage model =
     case model.currentPage of
         Thread story ->
-            viewtopic model
+            viewThread model
 
         Main feed ->
             viewfeed model
@@ -64,17 +65,3 @@ viewTimeAgo time =
 
             Err err ->
                 ""
-
-
-viewtopic : Model -> Html Msg
-viewtopic { thread, stories } =
-    case thread of
-        Just story ->
-            div []
-                [ text story.title
-                , text story.text
-                , a [ href story.url ] [ text "->" ]
-                ]
-
-        Nothing ->
-            text "No story something went wrong"
