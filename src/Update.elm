@@ -10,6 +10,9 @@ import Dict
 port subscribeToFeed : String -> Cmd msg
 
 
+port loadThread : List Int -> Cmd msg
+
+
 port getStoriesById : List Int -> Cmd msg
 
 
@@ -35,7 +38,7 @@ update msg model =
                     ( { model | currentPage = page }, loadFeedData feed )
 
                 Thread story ->
-                    ( { model | currentPage = page, thread = Just story }, Cmd.none )
+                    ( { model | currentPage = page, thread = Just story }, loadThread story.kids )
 
         ListenToFeed feed ->
             ( model, Cmd.none )

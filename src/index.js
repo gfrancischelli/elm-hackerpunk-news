@@ -17,14 +17,33 @@ app.ports.subscribeToFeed.subscribe(feed => {
   api.child(feed).on("value", snapshot => feedsPort.send(snapshot.val()));
 });
 
+app.ports.loadThread.subscribe(ids => {
+  fetchThread(ids)
+});
+
+function fetchThread(ids) {
+  ids.forEach((id) => {
+    fetchItem(id, (item) => {
+      updateItem.send(item);
+      if (item.kids && item.kids.length > 0) {
+        fetchThread(item.kids);
+      }
+    })
+  })
+}
+
+function fetchItem(id, cb) {
+  api.child(`/item/${id}`).off();
+  api.child(`/item/${id}`).on("value", snapshot => {
+    const item = snapshot.val();
+    item["type_"] = item.type;
+    cb(item);
+  });
+}
+
 app.ports.getStoriesById.subscribe(ids => {
   ids.forEach(id => {
-    api.child(`/item/${id}`).off();
-    api.child(`/item/${id}`).on("value", snapshot => {
-      const item = snapshot.val();
-      item["type_"] = item.type;
-      updateItem.send(item);
-    });
+    fetchItem(id, updateItem.send);
   });
 });
 
@@ -49,7 +68,6 @@ function drawScanLine() {
   elapsed += delta;
   if (elapsed > 2000) {
     elapsed = 0;
-    console.log(elapsed);
   }
   const Y = elapsed / 1000 * window.innerHeight;
   style.setProperty("--scanlineY", Math.floor(Y) + "px");
