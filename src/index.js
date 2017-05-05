@@ -1,6 +1,7 @@
 "use strict";
 
-import './index.html'
+import "./index.html";
+import "./styles.scss";
 
 import api from "./database";
 import Elm from "./Main.elm";

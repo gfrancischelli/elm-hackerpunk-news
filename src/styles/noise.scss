@@ -1,0 +1,45 @@
+.noise {
+  position: fixed;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  mix-blend-mode: screen;
+  opacity: 0.7;
+  pointer-events: none;
+  animation: noise 200ms infinite;
+  background-image: url(http://api.thumbr.it/whitenoise-30x30.png?background=0a2406ff&noise=142238&density=85&opacity=100);
+}
+
+.noise:after {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 999;
+  background-image: 
+    radial-gradient(transparent 65%, rgba(2, 8, 1, 1) 100%);
+  background-size: 100%;
+}
+
+.wrapper {
+  max-width: 980px;
+  margin: 0 auto;
+}
+ 
+@keyframes noise {
+  0% {
+    background-image: url(http://api.thumbr.it/whitenoise-30x30.png?background=0a2406ff&noise=142238&density=85&opacity=100)
+  }
+  33% {
+    background-image: url(http://api.thumbr.it/whitenoise-21x20.png?background=0a2406ff&noise=152235&density=85&opacity=100) 	
+  }
+  66% {
+    background-image: url(http://api.thumbr.it/whitenoise-20x19.png?background=0a2406ff&noise=142233&density=85&opacity=100)
+  }
+}
+
+

@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css?family=Share+Tech+Mono');
+@import 'styles/scanline.scss';
+@import 'styles/noise.scss';
+@import 'styles/story.scss';
+
+
+$dark-green: rgb(18, 27, 20);
+$bright-green: rgb(120, 205, 110);
+$pad-sm: 0.3em 0.4em;
+
+:root {
+  --scanlineY: 0;
+}
+
+body {
+  --screen-top: 0px;
+  --screen-bottom: 100vh;
+  background-color: $dark-green;
+  font-family: 'Share Tech Mono', monospace;
+  color: $bright-green;
+  max-height: 100vh;
+
+  background-image: 
+    linear-gradient(transparent 50%, rgba(10, 15, 8, 0.06) 50%);
+  background-size: 1px 7px;
+
+}
+
+
+a {
+  color: $bright-green;
+}
+
+button {
+  padding: $pad-sm;
+
+  text-shadow: inherit;
+  color: $bright-green;
+
+  background: none;
+  border: none;
+
+  border: 1px solid rgba($bright-green, 0.5);
+  background-color: rgba($bright-green, 0.15);
+  mix-blend-mode: screen;
+}
+
+.header h1 {
+  font-size: 2.4em;
+}
+
+.loading_spinner {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2em;
+}
