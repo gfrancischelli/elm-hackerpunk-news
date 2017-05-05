@@ -37,3 +37,24 @@ const setShadow = () => {
 setShadow();
 setInterval(setShadow, 60);
 
+// Animate scanline position relative to the viewport
+const style = document.documentElement.style;
+const duration = 3000;
+let currentTime = Date.now();
+let elapsed = 0;
+
+function drawScanLine() {
+  const newTime = Date.now();
+  const delta = newTime - currentTime;
+  elapsed += delta;
+  if (elapsed > 2000) {
+    elapsed = 0;
+    console.log(elapsed);
+  }
+  const Y = elapsed / 1000 * window.innerHeight;
+  style.setProperty("--scanlineY", Math.floor(Y) + "px");
+  currentTime = newTime;
+  requestAnimationFrame(drawScanLine);
+}
+
+drawScanLine();
