@@ -3,35 +3,40 @@ module View exposing (..)
 import View.Story exposing (viewStoryList)
 import Html exposing (..)
 import Html.Events exposing (..)
+import Html.Attributes exposing (href, class, id)
 import Types exposing (..)
+import Dict
+import Date
 
 
 view : Model -> Html Msg
 view model =
-    div []
-        [ h2 [] [ text "HackerNews" ]
-        , navbar
+    div [ class "wrapper" ]
+        [ div [ class "noise" ] []
+        , header
         , viewpage model
         ]
 
 
-navbar : Html Msg
-navbar =
-    div []
-        [ button [ onClick (ShowPage Top) ] [ text "Top" ]
-        , button [ onClick (ShowPage Best) ] [ text "Best" ]
-        , button [ onClick (ShowPage New) ] [ text "New" ]
-        , button [ onClick (ShowPage Topic) ] [ text "topic placeholder" ]
+header : Html Msg
+header =
+    div [ class "header" ]
+        [ h1 [] [ text "HackerNews" ]
+        , button [ onClick (ShowPage <| Main Top) ] [ text "Top" ]
+        , button [ onClick (ShowPage <| Main Best) ] [ text "Best" ]
+        , button [ onClick (ShowPage <| Main New) ] [ text "New" ]
+
+        -- , button [ onClick (ShowPage <| About) ] [ text "About" ]
         ]
 
 
 viewpage : Model -> Html Msg
 viewpage model =
     case model.currentPage of
-        Topic ->
+        Thread story ->
             viewtopic model
 
-        _ ->
+        Main feed ->
             viewfeed model
 
 
@@ -39,12 +44,23 @@ viewfeed : Model -> Html Msg
 viewfeed { stories, feed } =
     case feed of
         Nothing ->
-            text "no feed to see here"
+            div [ class "loading_spinner" ] [ text "loading ..." ]
 
         Just ids ->
-            div [] [ text "we got a feed" ]
+            div []
+                [ div [] (viewStoryList ids stories)
+                ]
 
 
 viewtopic : Model -> Html Msg
-viewtopic model =
-    text "heres a story"
+viewtopic { thread, stories } =
+    case thread of
+        Just story ->
+            div []
+                [ text story.title
+                , text story.text
+                , a [ href story.url ] [ text "->" ]
+                ]
+
+        Nothing ->
+            text "No story something went wrong"
