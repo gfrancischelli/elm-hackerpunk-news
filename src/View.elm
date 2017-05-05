@@ -52,6 +52,20 @@ viewfeed { stories, feed } =
                 ]
 
 
+viewTimeAgo : String -> String
+viewTimeAgo time =
+    let
+        result =
+            Date.fromString time
+    in
+        case result of
+            Ok date ->
+                ""
+
+            Err err ->
+                ""
+
+
 viewtopic : Model -> Html Msg
 viewtopic { thread, stories } =
     case thread of
