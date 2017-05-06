@@ -17,19 +17,21 @@ app.ports.subscribeToFeed.subscribe(feed => {
   api.child(feed).on("value", snapshot => feedsPort.send(snapshot.val()));
 });
 
-app.ports.loadThread.subscribe(ids => {
-  fetchThread(ids)
+app.ports.loadTopic.subscribe(topicId => {
+  fetchItem(topicId, function(story) {
+    fetchTopic(story.kids);
+  });
 });
 
-function fetchThread(ids) {
-  ids.forEach((id) => {
-    fetchItem(id, (item) => {
+function fetchTopic(ids) {
+  ids.forEach(id => {
+    fetchItem(id, item => {
       updateItem.send(item);
       if (item.kids && item.kids.length > 0) {
-        fetchThread(item.kids);
+        fetchTopic(item.kids);
       }
-    })
-  })
+    });
+  });
 }
 
 function fetchItem(id, cb) {
@@ -41,7 +43,7 @@ function fetchItem(id, cb) {
   });
 }
 
-app.ports.getStoriesById.subscribe(ids => {
+app.ports.loadStoriesById.subscribe(ids => {
   ids.forEach(id => {
     fetchItem(id, updateItem.send);
   });
