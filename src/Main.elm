@@ -40,7 +40,7 @@ delta2url previous current =
     let
         url =
             case current.currentPage of
-                Main feed ->
+                Home feed ->
                     case feed of
                         New ->
                             "/new"
@@ -51,8 +51,8 @@ delta2url previous current =
                         Best ->
                             "/best"
 
-                Thread story ->
-                    "/topic/" ++ toString story.id
+                Topic id ->
+                    "/topic/" ++ toString id
     in
         Just
             { entry = RouteUrl.NewEntry
@@ -69,30 +69,34 @@ location2messages location =
         case path of
             Just page ->
                 case page of
-                    Topic id ->
-                        [ ShowTopicById id ]
+                    TopicRoute id ->
+                        [ ShowPage (Topic id) ]
 
-                    Stories stories ->
-                        case stories of
-                            "top" ->
-                                [ ShowPage (Main Top) ]
-
+                    FeedRoute feed ->
+                        case feed of
                             "new" ->
-                                [ ShowPage (Main New) ]
+                                [ ShowPage (Home New) ]
 
                             "best" ->
-                                [ ShowPage (Main Best) ]
+                                [ ShowPage (Home Best) ]
 
                             _ ->
-                                [ ShowPage (Main Top) ]
+                                [ ShowPage (Home Top) ]
 
             Nothing ->
                 []
 
 
+type Route
+    = TopicRoute Int
+    | FeedRoute String
+
+
+route : UrlParser.Parser (Route -> c) c
 route =
     UrlParser.oneOf
-        [ UrlParser.map Topic (UrlParser.s "topic" </> UrlParser.int)
+        [ UrlParser.map TopicRoute (UrlParser.s "topic" </> UrlParser.int)
+        , UrlParser.map FeedRoute (UrlParser.string)
         ]
 
 
