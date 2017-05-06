@@ -1,7 +1,7 @@
 module View exposing (..)
 
 import View.Story exposing (viewStoryList)
-import View.Thread exposing (viewThread)
+import View.Topic exposing (viewTopic)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (href, class, id)
@@ -23,34 +23,30 @@ header : Html Msg
 header =
     div [ class "header" ]
         [ h1 [] [ text "HackerNews" ]
-        , button [ onClick (ShowPage <| Main Top) ] [ text "Top" ]
-        , button [ onClick (ShowPage <| Main Best) ] [ text "Best" ]
-        , button [ onClick (ShowPage <| Main New) ] [ text "New" ]
-
-        -- , button [ onClick (ShowPage <| About) ] [ text "About" ]
+        , button [ onClick (ShowPage <| Home Top) ] [ text "Top" ]
+        , button [ onClick (ShowPage <| Home New) ] [ text "New" ]
+        , button [ onClick (ShowPage <| Home Best) ] [ text "Best" ]
         ]
 
 
 viewpage : Model -> Html Msg
 viewpage model =
     case model.currentPage of
-        Thread story ->
-            viewThread model
+        Topic id ->
+            viewTopic id model
 
-        Main feed ->
+        Home feed ->
             viewfeed model
 
 
 viewfeed : Model -> Html Msg
 viewfeed { stories, feed } =
-    case feed of
-        Nothing ->
-            div [ class "loading_spinner" ] [ text "loading ..." ]
-
-        Just ids ->
-            div []
-                [ div [] (viewStoryList ids stories)
-                ]
+    if List.length feed == 0 then
+        div [ class "loading_spinner" ] [ text "loading ..." ]
+    else
+        div []
+            [ div [] (viewStoryList feed stories)
+            ]
 
 
 viewTimeAgo : String -> String
