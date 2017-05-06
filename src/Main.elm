@@ -6,6 +6,9 @@ import View exposing (view)
 import Types exposing (..)
 import Dict
 import Json.Encode as Json
+import RouteUrl exposing (RouteUrlProgram, HistoryEntry, UrlChange)
+import UrlParser exposing ((</>), s, int, string, parsePath, map)
+import Navigation exposing (Location)
 
 
 -- APP
@@ -16,14 +19,85 @@ init =
     ( Model Dict.empty (Home Top) [], getFeedUpdates Top )
 
 
-main : Program Never Model Msg
+main : RouteUrlProgram Never Model Msg
 main =
-    Html.program
-        { init = init
+    RouteUrl.program
+        { delta2url = delta2url
+        , location2messages = location2messages
+        , init = init
         , view = view
         , update = update
         , subscriptions = subscriptions
         }
+
+
+
+-- ROUTER
+
+
+delta2url : Model -> Model -> Maybe UrlChange
+delta2url previous current =
+    let
+        url =
+            case current.currentPage of
+                Home feed ->
+                    case feed of
+                        New ->
+                            "/new"
+
+                        Top ->
+                            "/top"
+
+                        Best ->
+                            "/best"
+
+                Topic id ->
+                    "/topic/" ++ toString id
+    in
+        Just
+            { entry = RouteUrl.NewEntry
+            , url = url
+            }
+
+
+location2messages : Location -> List Msg
+location2messages location =
+    let
+        path =
+            parsePath route location
+    in
+        case path of
+            Just page ->
+                case page of
+                    TopicRoute id ->
+                        [ ShowPage (Topic id) ]
+
+                    FeedRoute feed ->
+                        case feed of
+                            "new" ->
+                                [ ShowPage (Home New) ]
+
+                            "best" ->
+                                [ ShowPage (Home Best) ]
+
+                            _ ->
+                                [ ShowPage (Home Top) ]
+
+            Nothing ->
+                []
+
+
+type Route
+    = TopicRoute Int
+    | FeedRoute String
+
+
+route : UrlParser.Parser (Route -> c) c
+route =
+    UrlParser.oneOf
+        [ UrlParser.map TopicRoute (UrlParser.s "topic" </> UrlParser.int)
+        , UrlParser.map FeedRoute (UrlParser.string)
+        ]
 
 
 
