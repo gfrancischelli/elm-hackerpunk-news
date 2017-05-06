@@ -4,10 +4,11 @@ import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (href, class, id)
 import Types exposing (..)
+import Types.Story exposing (Story, StoryId, Stories)
 import Dict
 
 
-viewStoryList : List Int -> StoryPool -> List (Html Msg)
+viewStoryList : List StoryId -> Stories -> List (Html Msg)
 viewStoryList ids stories =
     ids
         |> List.map (\id -> Dict.get id stories)
@@ -32,5 +33,5 @@ viewStoryInfo story =
     div [ class "story__info" ]
         [ text ("by: " ++ story.by)
         , text " | "
-        , a [ onClick (ShowPage (Thread story)) ] [ text "comments" ]
+        , a [ onClick (ShowPage (Topic story.id)) ] [ text "comments" ]
         ]
