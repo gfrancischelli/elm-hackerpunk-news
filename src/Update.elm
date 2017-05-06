@@ -1,6 +1,7 @@
-port module Update exposing (update, loadFeedData)
+port module Update exposing (update, getFeedUpdates)
 
 import Types exposing (..)
+import Types.Story exposing (..)
 import Json.Encode as Json
 import Json.Decode as Decode
 import Json.Decode.Pipeline as Pipe
@@ -10,14 +11,14 @@ import Dict
 port subscribeToFeed : String -> Cmd msg
 
 
-port loadThread : List Int -> Cmd msg
+port loadTopic : StoryId -> Cmd msg
 
 
-port getStoriesById : List Int -> Cmd msg
+port loadStoriesById : List Int -> Cmd msg
 
 
-loadFeedData : Feed -> Cmd msg
-loadFeedData feed =
+getFeedUpdates : Feed -> Cmd msg
+getFeedUpdates feed =
     case feed of
         Top ->
             subscribeToFeed "topstories"
@@ -34,23 +35,24 @@ update msg model =
     case msg of
         ShowPage page ->
             case page of
-                Main feed ->
-                    ( { model | currentPage = page }, loadFeedData feed )
+                Topic id ->
+                    ( { model | currentPage = page }
+                    , loadTopic id
+                    )
 
-                Thread story ->
-                    ( { model | currentPage = page, thread = Just story }, loadThread story.kids )
+                Home feed ->
+                    ( { model | currentPage = page }
+                    , getFeedUpdates feed
+                    )
 
-        ListenToFeed feed ->
-            ( model, Cmd.none )
-
-        UpdateFeedIds list ->
-            ( { model | feed = Just list }, getStoriesById list )
+        UpdateFeed idList ->
+            ( { model | feed = idList }, loadStoriesById idList )
 
         UpdateItem item ->
             ( { model | stories = addStoryToDict item model.stories }, Cmd.none )
 
 
-addStoryToDict : Json.Value -> StoryPool -> StoryPool
+addStoryToDict : Json.Value -> Stories -> Stories
 addStoryToDict item stories =
     let
         result =
