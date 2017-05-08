@@ -6,6 +6,7 @@ import Json.Encode as Json
 import Json.Decode as Decode
 import Json.Decode.Pipeline as Pipe
 import Dict
+import Date
 
 
 port subscribeToFeed : String -> Cmd msg
@@ -44,6 +45,9 @@ update msg model =
                     ( { model | currentPage = page }
                     , getFeedUpdates feed
                     )
+
+        UpdateDate time ->
+            ( { model | date = Just (Date.fromTime time) }, Cmd.none )
 
         UpdateFeed idList ->
             ( { model | feed = idList }, loadStoriesById idList )

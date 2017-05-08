@@ -9,6 +9,8 @@ import Json.Encode as Json
 import RouteUrl exposing (RouteUrlProgram, HistoryEntry, UrlChange)
 import UrlParser exposing ((</>), s, int, string, parsePath, map)
 import Navigation exposing (Location)
+import Time exposing (Time, minute)
+import Task
 
 
 -- APP
@@ -16,7 +18,9 @@ import Navigation exposing (Location)
 
 init : ( Model, Cmd Msg )
 init =
-    ( Model Dict.empty (Home Top) [], getFeedUpdates Top )
+    ( Model Dict.empty (Home Top) [] Nothing
+    , Cmd.batch [ getFeedUpdates Top, Task.perform UpdateDate Time.now ]
+    )
 
 
 main : RouteUrlProgram Never Model Msg
@@ -115,4 +119,5 @@ subscriptions model =
     Sub.batch
         [ updateFeedIds UpdateFeed
         , updateItem UpdateItem
+        , Time.every minute UpdateDate
         ]
