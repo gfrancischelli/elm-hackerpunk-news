@@ -4,11 +4,12 @@ import Html exposing (..)
 import Html.Attributes exposing (href, class, id)
 import Types exposing (..)
 import Types.Story exposing (Stories, StoryId)
+import View.Story exposing (viewStoryInfo)
 import Dict
 
 
 viewTopic : StoryId -> Model -> Html Msg
-viewTopic id { stories } =
+viewTopic id { stories, date } =
     let
         maybe =
             Dict.get id stories
@@ -16,13 +17,15 @@ viewTopic id { stories } =
         case maybe of
             Just story ->
                 div [ class "thread" ]
-                    [ a [ href story.url, class "thread__title" ] [ text story.title ]
                     , text story.text
+                    [ a [ href story.url, class "thread__title" ]
+                        [ text story.title ]
+                    , viewStoryInfo date story
                     , div [] (List.map (viewComment stories) story.kids)
                     ]
 
             Nothing ->
-                div [] [ text "No story something went wrong" ]
+                div [] [ text "..." ]
 
 
 viewComment : Stories -> Int -> Html Msg
@@ -43,4 +46,4 @@ viewComment stories id =
                     ]
 
             Nothing ->
-                text "failed to load"
+                text "..."

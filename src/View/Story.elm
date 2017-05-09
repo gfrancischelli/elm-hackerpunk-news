@@ -35,14 +35,19 @@ viewStory now ( n, story ) =
     div [ class "story" ]
         [ a [ href story.url, class "story__title" ]
             [ text <| (toString n) ++ ". " ++ story.title ]
-        , div [ class "story__info" ]
-            [ text <| toString story.score ++ " points"
-            , text (" by " ++ story.by)
-            , viewTimeAgo now story.time
-            , text " | "
-            , a [ onClick (ShowPage (Topic story.id)) ]
-                [ text <| (toString (List.length story.kids) ++ " comments") ]
-            ]
+        , viewStoryInfo now story
+        ]
+
+
+viewStoryInfo : Maybe Date -> Story -> Html Msg
+viewStoryInfo now story =
+    div [ class "story__info" ]
+        [ text <| toString story.score ++ " points"
+        , text (" by " ++ story.by)
+        , viewTimeAgo now story.time
+        , text " | "
+        , a [ onClick (ShowPage (Topic story.id)) ]
+            [ text <| (toString (List.length story.kids) ++ " comments") ]
         ]
 
 
