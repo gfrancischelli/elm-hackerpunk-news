@@ -5,6 +5,9 @@ import Html.Attributes exposing (href, class, id)
 import Types exposing (..)
 import Types.Story exposing (Stories, StoryId)
 import View.Story exposing (viewStoryInfo)
+import Json.Encode
+import HtmlParser exposing (parse)
+import HtmlParser.Util exposing (..)
 import Dict
 
 
@@ -17,10 +20,13 @@ viewTopic id { stories, date } =
         case maybe of
             Just story ->
                 div [ class "thread" ]
-                    , text story.text
                     [ a [ href story.url, class "thread__title" ]
                         [ text story.title ]
                     , viewStoryInfo date story
+                    , div []
+                        (parse story.text
+                            |> toVirtualDom
+                        )
                     , div [] (List.map (viewComment stories) story.kids)
                     ]
 
@@ -37,8 +43,11 @@ viewComment stories id =
         case maybe of
             Just story ->
                 div [ class "comment" ]
-                    [ text story.by
-                    , p [] [ text story.text ]
+                    [ p [ class "comment__author" ] [ text <| "> " ++ story.by ]
+                    , div []
+                        (parse story.text
+                            |> toVirtualDom
+                        )
                     , story.kids
                         |> List.filter (\n -> n > 0)
                         |> List.map (viewComment stories)
