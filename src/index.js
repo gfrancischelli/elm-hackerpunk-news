@@ -51,8 +51,8 @@ app.ports.loadStoriesById.subscribe(ids => {
 
 // Rgb Split with text-shadow
 const setShadow = () => {
-  let displace = 1.8 - Math.random();
-  const shadow = `${displace}px 0px 1px rgba(0, 70, 255, 0.8), ${-displace}px 0px 1px rgba(255, 50, 0, 0.6), 0 0 3px`;
+  let displace = 2 - Math.random();
+  const shadow = `${displace}px 0px 1px rgba(0, 70, 255, 0.9), ${-displace}px 0px 1px rgba(255, 50, 0, 0.6), 0 0 3px`;
   document.body.style.textShadow = shadow;
 };
 setShadow();
@@ -77,4 +77,4 @@ function drawScanLine() {
   requestAnimationFrame(drawScanLine);
 }
 
-drawScanLine();
+// drawScanLine();

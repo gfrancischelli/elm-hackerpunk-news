@@ -22,10 +22,13 @@ view model =
 header : Html Msg
 header =
     div [ class "header" ]
-        [ h1 [] [ text "HackerNews" ]
-        , button [ onClick (ShowPage <| Home Top) ] [ text "Top" ]
-        , button [ onClick (ShowPage <| Home New) ] [ text "New" ]
-        , button [ onClick (ShowPage <| Home Best) ] [ text "Best" ]
+        [ h1 []
+            [ text "HackerNews" ]
+        , div []
+            [ button [ onClick (ShowPage <| Home Top) ] [ text "T0P" ]
+            , button [ onClick (ShowPage <| Home New) ] [ text "N3W" ]
+            , button [ onClick (ShowPage <| Home Best) ] [ text "B35T" ]
+            ]
         ]
 
 

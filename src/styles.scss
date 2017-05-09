@@ -10,6 +10,7 @@ $pad-sm: 0.3em 0.4em;
 
 :root {
   --scanlineY: 0;
+  font-size: 14px;
 }
 
 body {
@@ -19,6 +20,9 @@ body {
   font-family: 'Share Tech Mono', monospace;
   color: $bright-green;
   max-height: 100vh;
+  max-width: 100vw;
+  overflow-x: hidden;
+  word-break: break-word !important;
 
   background-image: 
     linear-gradient(transparent 50%, rgba(10, 15, 8, 0.06) 50%);
@@ -26,6 +30,11 @@ body {
 
 }
 
+.wrapper {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+ 
 
 a {
   color: $bright-green;
@@ -40,13 +49,32 @@ button {
   background: none;
   border: none;
 
-  border: 1px solid rgba($bright-green, 0.5);
-  background-color: rgba($bright-green, 0.15);
+  cursor: pointer;
+
+  // border: 1px solid rgba($bright-green, 0.5);
+  // background-color: rgba($bright-green, 0.15);
   mix-blend-mode: screen;
 }
 
+button:active,
+button:focus, {
+  border: none;
+  outline: none;
+}
+
+.header {
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
 .header h1 {
-  font-size: 2.4em;
+  display: inline;
+  font-size: 2.5em;
+}
+
+.header div {
+  display: inline;
+  margin-left: 1em;
 }
 
 .thread__title {
@@ -58,15 +86,10 @@ button {
 }
 
 .comment {
-  padding-left: 2em;
-  margin-top: 1em;
-  border: 1px solid $bright-green;
-  border-bottom: none;
+  padding-left: 1em;
+  margin-top: 2em;
+  border-left: 2px dashed rgba($bright-green, 0.1);
   line-height: 1.6;
-}
-
-.comment p {
-  font-size: 0.8em;
 }
 
 .loading_spinner {
