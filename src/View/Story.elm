@@ -14,26 +14,36 @@ import Date.Extra.Core
 viewStoryList : List StoryId -> Stories -> Maybe Date -> List (Html Msg)
 viewStoryList ids stories now =
     ids
-        |> List.map (\id -> Dict.get id stories)
+        |> List.filterMap (\id -> Dict.get id stories)
+        |> List.foldl toStoryList { n = 1, stories = [] }
+        |> .stories
+        |> List.reverse
         |> List.map (viewStory now)
 
 
-viewStory : Maybe Date -> Maybe Story -> Html Msg
-viewStory now maybe =
-    case maybe of
-        Just story ->
-            div [ class "story" ]
-                [ a [ href story.url, class "story__title" ] [ text story.title ]
-                , div [ class "story__info" ]
-                    [ text ("by: " ++ story.by)
-                    , viewTimeAgo now story.time
-                    , text " | "
-                    ]
-                , a [ onClick (ShowPage (Topic story.id)) ] [ text "comments" ]
-                ]
+toStoryList : Story -> StoryAcc -> StoryAcc
+toStoryList story record =
+    { record | n = record.n + 1, stories = ( record.n, story ) :: record.stories }
 
-        Nothing ->
-            text " Nothing Here"
+
+type alias StoryAcc =
+    { n : Int, stories : List ( Int, Story ) }
+
+
+viewStory : Maybe Date -> ( Int, Story ) -> Html Msg
+viewStory now ( n, story ) =
+    div [ class "story" ]
+        [ a [ href story.url, class "story__title" ]
+            [ text <| (toString n) ++ ". " ++ story.title ]
+        , div [ class "story__info" ]
+            [ text <| toString story.score ++ " points"
+            , text (" by " ++ story.by)
+            , viewTimeAgo now story.time
+            , text " | "
+            , a [ onClick (ShowPage (Topic story.id)) ]
+                [ text <| (toString (List.length story.kids) ++ " comments") ]
+            ]
+        ]
 
 
 viewTimeAgo : Maybe Date -> Int -> Html Msg
