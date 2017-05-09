@@ -7,7 +7,7 @@ import Html.Events exposing (..)
 import Html.Attributes exposing (href, class, id)
 import Types exposing (..)
 import Dict
-import Date
+import Date exposing (hour, Date)
 
 
 view : Model -> Html Msg
@@ -40,12 +40,12 @@ viewpage model =
 
 
 viewfeed : Model -> Html Msg
-viewfeed { stories, feed } =
+viewfeed { stories, feed, date } =
     if List.length feed == 0 then
         div [ class "loading_spinner" ] [ text "loading ..." ]
     else
         div []
-            [ div [] (viewStoryList feed stories)
+            [ div [] (viewStoryList feed stories date)
             ]
 
 
